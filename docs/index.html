@@ -5,8 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Парсинг и различия версий сервисов при поставке</title>
+    <style>
+        textarea, section {
+            display: block;
+            border: 1px solid #000;
+            overflow: auto;
+            width: 600px;
+            height: 400px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: auto;
+            justify-items: center;
+        }
+
+        .button-wrapper {
+            padding: 80px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Basic button styles */
+        button {
+            background: none;
+            border: 2px solid;
+            font: inherit;
+            line-height: 1;
+            margin: 0.5em;
+            padding: 1em 2em;
+            cursor: pointer;
+        }
+
+        #button {
+            padding: 20px 40px;
+        }
+
+        
+    </style>
 </head>
 <body>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat saepe porro quidem, velit nobis quasi, libero non quas nemo quod doloribus, est maiores sunt nulla aliquam! Aspernatur soluta quidem perferendis.
+    <div class="grid">
+        <div>
+            <label for="input">Вставьте diff</label>
+            <textarea id="input" name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div>
+            <label for="section">Результат</label>
+            <section id="section"></section>
+        </div>
+    </div>
+    
+    <div class="button-wrapper ">
+        <button id="button">Parse</button>
+    </div>
+
+    <script>
+        let input = document.getElementById('input');
+let button = document.getElementById('button');
+let section = document.getElementById('section');
+
+
+button.addEventListener('click', function(e) {
+  console.dir(input)
+  
+  let strArr = input.value.split("\n");
+        console.log(strArr);
+        
+        let result = [];
+        strArr.forEach((item) => {
+            let preResult = item.split(" ");
+            result.push(preResult)
+        });
+        
+        console.log(result);
+        
+
+        let result2 = result.map((item) => {
+            return {
+            name: item[0],
+            from: item[1],
+            to: item[3]
+            }
+        });
+        
+        let result3 = '';
+        
+        result2.forEach((item) => {
+            result3 = result3 + appendElement(item);
+            console.log(result3)
+            
+        })
+        
+        section.innerHTML = result3;
+
+        })
+
+        function appendElement(obj) {
+        let string_start = '<div>';
+        let string_end = '</div>';
+        let stringName = obj.name + ': ';
+        
+        let stringVersions;
+        if (obj.from === obj.to) {
+            stringVersions = `${obj.from} => ${obj.to}`
+        } else {
+            stringVersions = `<b>${obj.from} => ${obj.to}</b>`
+        }
+        
+        return string_start + stringName + stringVersions + string_end;
+        }
+    </script>
 </body>
 </html>
